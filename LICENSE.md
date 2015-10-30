@@ -1,6 +1,6 @@
 The Networks.jl package is licensed under the MIT "Expat" License:
 
-> Copyright (c) 2015: Seth Bromberger.
+> Copyright (c) 2015: Seth Bromberger and other contributors.
 >
 > Permission is hereby granted, free of charge, to any person obtaining
 > a copy of this software and associated documentation files (the
