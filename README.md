@@ -17,3 +17,11 @@ type Network{G,V.E}
   eprop::Dict{Edge. E}
 end
 ```
+
+The idea is that any Network can be converted into a graph by forgetting the properties.
+Thus `convert(Graph, net::Network)` are defined for for both `Graph` and `DiGraph`.
+If combined with default definitions of the graph functions such as `fadj` that do conversion before calling the "real"
+ definition then one can use `Network` as a graph transparently.
+
+For example: `fadj(g::Any) = fadj(convert(SimpleGraph, g))` allows one to call `fadj` on an arbitrary network and get
+the forward adjacency list.
