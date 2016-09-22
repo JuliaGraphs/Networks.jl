@@ -11,10 +11,10 @@ This is similar to the LightGraphs.jl philosophy but with the understanding that
 For now the Package is bare with just the type:
 
 ```julia
-type Network{G,V.E}
+type Network{G,V,E}
   graph::G
   vprop::Vector{V}
-  eprop::Dict{Edge. E}
+  eprop::Dict{Edge, E}
 end
 ```
 
