@@ -25,8 +25,10 @@ Network{G,V}(::Type{G}, ::Type{V}) = Network(G(), V[], Dict{Edge,Void}())
 import Base.==
 
 function add_vertex!{G,V,E}(g::Network{G,V,E}, vertex_info::V)
-    add_vertex!(g.graph)
+    n = add_vertex!(g.graph)
     push!(g.vprop, vertex_info)
+
+    return n
 end
 
 function add_vertices!{G,V,E}(g::Network{G,V,E}, vertex_info::Vector{V})
@@ -39,6 +41,7 @@ end
 function add_edge!{G,V,E}(g::Network{G,V,E}, i, j, edge_info::E)
     e = add_edge!(g.graph, i, j)
     (g.eprop)[e] = edge_info
+    return e
 end
 
 add_edge!{G,V,E}(g::Network{G,V,E}, i, j) = add_edge!(g.graph, i, j)
