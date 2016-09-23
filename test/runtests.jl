@@ -1,5 +1,5 @@
-using Networks
 using LightGraphs
+using Networks
 using Base.Test
 
 # write your own tests here
@@ -13,22 +13,24 @@ function prepgraph(g)
     add_edge!(g, 3,4)
     add_edge!(g, 4,5)
     add_edge!(g, 5,1)
-    net = Network(g, 1:nv(g), Dict{Edge, Float64}())
-    net.eprop[Edge(5,1)] = 2.3
+    net = Network(g, collect(1:nv(g)), Dict{Edge, Float64}())
+    net.eprops[Edge(5, 1)] = 2.3
     return net
 end
+
 net = prepgraph(g)
+
 @test convert(Graph, net) == g
 @test Graph(net) == g
 @test fadj(net) == fadj(g)
-@test_throws ErrorException convert(DiGraph, net) 
+@test_throws ErrorException convert(DiGraph, net)
 
 dnet = prepgraph(dg)
 @test convert(DiGraph, dnet) == dg
 @test fadj(dnet) == fadj(dg)
-@test_throws ErrorException convert(Graph, dnet) 
+@test_throws ErrorException convert(Graph, dnet)
 
-# test that least upper bound type 
+# test that least upper bound type
 # of a network and a graph is the compatible graph type
 @test promote_rule(Network{Graph,Int,Int}, Graph) == Graph
 @test promote_rule(Network{DiGraph,Int,Int}, DiGraph) == DiGraph
@@ -39,3 +41,17 @@ dnet = prepgraph(dg)
 @test promote_rule(Network{Graph,Int,Int}, DiGraph) == Union{}
 @test promote(net, dg) == (net, dg)
 @test promote(dnet, g) == (dnet, g)
+
+
+g = Graph()
+add_vertex!(g)
+add_vertex!(g)
+add_edge!(g, 1, 2)
+
+net = Network(Graph, String)
+add_vertex!(net, "a")
+add_vertex!(net, "b")
+add_edge!(net, 1, 2)
+
+@test net.graph == g
+@test net.vprops == ["a", "b"]
