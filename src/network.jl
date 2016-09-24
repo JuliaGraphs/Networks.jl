@@ -50,11 +50,15 @@ add_edge!{G,V,E}(net::Network{G,V,E}, i::Int, j::Int, eprop::E) =
                                     add_edge!(net.graph, Edge(i,j), eprop)
 
 
-function set_vprop!{G,V,E}(net::Network{G,V,E}, i::Int, vprop::V)
+function set_prop!{G,V,E}(net::Network{G,V,E}, i::Int, vprop::V)
     net.vprops[i] = vprop
 end
 
-function set_eprop!{G,V,E}(net::Network{G,V,E}, e::Edge, eprop::E)
+
+get_prop(net::Network, i::Int) = net.vprops[i]
+get_prop(net::Network, e::Edge) = (e = sort(net.graph, e); net.eprops[e])
+
+function set_prop!{G,V,E}(net::Network{G,V,E}, e::Edge, eprop::E)
     e = sort(net.graph, e)
     net.eprops[e] = eprop
 end

@@ -9,7 +9,7 @@ import Base: convert, promote_rule, ==
 
 export AbstractNetwork, Network
 
-export set_vprop!, set_eprop!
+export set_prop!, get_prop
 
 export graph
 

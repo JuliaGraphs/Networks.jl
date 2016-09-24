@@ -3,9 +3,6 @@ using LightGraphs
 using Networks
 using Base.Test
 
-# write your own tests here
-@test 1 == 1
-
 g = Graph(5)
 dg = DiGraph(5)
 function prepgraph(g)
@@ -65,9 +62,11 @@ add_edge!(net, 1, 2)
 @test ne(net) == ne(net.graph)
 
 net2 = Network(g, String)
-set_vprop!(net2, 1, "a")
-set_vprop!(net2, 2, "b")
+set_prop!(net2, 1, "a")
+set_prop!(net2, 2, "b")
 @test net2 == net
+@test get_prop(net2, 1) == "a"
+@test get_prop(net2, 2) == "b"
 
 net3 = Network(g, Void, String)
 @test nv(g) == 2
@@ -75,8 +74,11 @@ add_vertex!(net3)
 @test nv(g) == 3
 @test nv(net3) == 3
 
-set_eprop!(net3, Edge(2,1), "ciao")
+set_prop!(net3, Edge(2,1), "ciao")
 @test net3.eprops[Edge(1,2)] == "ciao"
+
+@test get_prop(net3, Edge(1,2)) == "ciao"
+@test get_prop(net3, Edge(2,1)) == "ciao"
 
 @test Graph(net3) == net3.graph
 @test graph(net3) == net3.graph
