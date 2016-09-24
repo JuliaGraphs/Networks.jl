@@ -76,4 +76,7 @@ add_vertex!(net3)
 @test nv(net3) == 3
 
 set_eprop!(net3, Edge(2,1), "ciao")
-@test net3.eprop[Edge(1,2)] == "ciao"
+@test net3.eprops[Edge(1,2)] == "ciao"
+
+@test Graph(net3) == net3.graph
+@test graph(net3) == net3.graph
