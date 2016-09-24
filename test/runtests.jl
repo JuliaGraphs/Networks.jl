@@ -1,3 +1,4 @@
+include("../src/Networks.jl")
 using LightGraphs
 using Networks
 using Base.Test
@@ -13,7 +14,7 @@ function prepgraph(g)
     add_edge!(g, 3,4)
     add_edge!(g, 4,5)
     add_edge!(g, 5,1)
-    net = Network(g, collect(1:nv(g)), Dict{Edge, Float64}())
+    net = Network(g, Dict{Int, Float64}(), Dict{Edge, Float64}())
     net.eprops[Edge(5, 1)] = 2.3
     return net
 end
@@ -54,4 +55,25 @@ add_vertex!(net, "b")
 add_edge!(net, 1, 2)
 
 @test net.graph == g
-@test net.vprops == ["a", "b"]
+@test net.vprops[1] == "a"
+@test net.vprops[2] == "b"
+
+@test typeof(net.vprops) <: Dict
+@test typeof(net.eprops) <: Dict
+
+@test nv(net) == nv(net.graph)
+@test ne(net) == ne(net.graph)
+
+net2 = Network(g, String)
+set_vprop!(net2, 1, "a")
+set_vprop!(net2, 2, "b")
+@test net2 == net
+
+net3 = Network(g, Void, String)
+@test nv(g) == 2
+add_vertex!(net3)
+@test nv(g) == 3
+@test nv(net3) == 3
+
+set_eprop!(net3, Edge(2,1), "ciao")
+@test net3.eprop[Edge(1,2)] == "ciao"
