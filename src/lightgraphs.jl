@@ -7,7 +7,7 @@ graph(net::Network) = net.graph
 sort(g::Graph, e::Edge) = e[1] <= e[2] ? e : reverse(e)
 sort(g::DiGraph, e::Edge) = e
 
-function convert{T<:SimpleGraph, G,V,E}(::Type{T}, net::Network{G,V,E})
+function convert{T<:SimpleGraph, G,V,E,H}(::Type{T}, net::Network{G,V,E,H})
     if typeof(net.graph) <: T
         return net.graph
     else
@@ -16,7 +16,7 @@ function convert{T<:SimpleGraph, G,V,E}(::Type{T}, net::Network{G,V,E})
 end
 
 # promotion_rule{T<:SimpleGraph}(::Type{T}, ::Type{Network}) = T
-promote_rule{T<:SimpleGraph, V, E}(::Type{Network{T,V,E}}, ::Type{T}) = T
+promote_rule{G<:SimpleGraph, V,E,H}(::Type{Network{G,V,E,H}}, ::Type{G}) = G
 
 # this is how one could define methods in LightGraphs
 # to make everything work for types that embed a graph

@@ -11,7 +11,7 @@ function prepgraph(g)
     add_edge!(g, 3,4)
     add_edge!(g, 4,5)
     add_edge!(g, 5,1)
-    net = Network(g, Dict{Int, Float64}(), Dict{Edge, Float64}())
+    net = Network(g, Dict{Int, Float64}(), Dict{Edge, Float64}(), Void)
     net.eprops[Edge(5, 1)] = 2.3
     return net
 end
@@ -30,13 +30,13 @@ dnet = prepgraph(dg)
 
 # test that least upper bound type
 # of a network and a graph is the compatible graph type
-@test promote_rule(Network{Graph,Int,Int}, Graph) == Graph
-@test promote_rule(Network{DiGraph,Int,Int}, DiGraph) == DiGraph
+@test promote_rule(Network{Graph,Int,Int,Void}, Graph) == Graph
+@test promote_rule(Network{DiGraph,Int,Int,Void}, DiGraph) == DiGraph
 @test promote(dnet, dg) == (dg,dg)
 @test promote(net, g) == (g,g)
 
 # if the graph types are incompatible do not promote!
-@test promote_rule(Network{Graph,Int,Int}, DiGraph) == Union{}
+@test promote_rule(Network{Graph,Int,Int,Void}, DiGraph) == Union{}
 @test promote(net, dg) == (net, dg)
 @test promote(dnet, g) == (dnet, g)
 
