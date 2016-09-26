@@ -22,6 +22,32 @@ function getprop(n::UNet, e::Edge, p::Symbol)
 end
 getprop(n::UNet, i::Int, j::Int, p::Symbol) = getprop(n, Edge(i,j), p)
 
+function setprop!(n::UNet, i::Int; kws...)
+    props = get(n.vprops, i, DSA())
+    for (name,value) in kws
+        props[name] = value
+    end
+    n.vprops[i] = props
+end
+
+function setprop!(n::UNet, e::Edge; kws...)
+    e = sort(n.graph, e)
+    props = get(n.eprops, e, DSA())
+    for (name,value) in kws
+        props[name] = value
+    end
+    n.eprops[e] = props
+end
+
+setprop!(n::UNet, i::Int, j::Int; kws...) = setprop!(n, Edge(i,j); kws...)
+
+function setprop!(n::UNet; kws...)
+    props = n.gprops
+    for (name,value) in kws
+        props[name] = value
+    end
+end
+
 """
     add_vertex!(net; kws...)
 

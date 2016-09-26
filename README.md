@@ -24,21 +24,26 @@ structures.
 using Networks
 using LightGraph
 n = Net(10)
-add_vertex!(n, :label="pino", :weight=2.1)
-nv(n) == 11 # number of vertices
+nv(n) == 10 # number of vertices
+ne(n) == 0 # number of edges
 
 #vertex properties
+add_vertex!(n, label="pino", weight=2.1)
 getprop(n, 11, :label) == "pino"
-setprop!(n, 2, :label="rose")
+setprop!(n, 2, label="rose")
 
 #edge properties
-add_edge!(n, 1, 2, :width=10)
-setprop!(n, Edge(1,2), :label="violet", :a = "b")
+add_edge!(n, 1, 2, width=10)
+setprop!(n, Edge(1,2), label="violet", a = "b")
 getprop(n, 1, 2, :width) == 10
+getprop(n, 1, 2, :a) == "b"
 
+nv(n) == 11 # number of vertices
 ne(n) == 1 # number of edges
 
-setprop!(n, :name="mynetwork", :id=1) #set graph properties
+# graph properties
+setprop!(n, name="mynetwork", id=1)
+getprop(n, :name) == "mynetwork"
 
 # construct from LightGraphs graphs
 n = Net(CompleteGraph(10, 10))

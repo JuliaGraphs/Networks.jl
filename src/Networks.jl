@@ -2,7 +2,7 @@ module Networks
 using LightGraphs
 
 import LightGraphs: Graph, DiGraph, SimpleGraph, Edge,
-        fadj, nv, ne,
+        fadj, nv, ne, edges,
         add_vertex!, add_vertices!, add_edge!
 
 import Base: convert, promote_rule, ==

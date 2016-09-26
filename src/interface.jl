@@ -5,6 +5,7 @@ abstract AbstractNetwork
 
 nv(net::AbstractNetwork) = nv(net.graph)
 ne(net::AbstractNetwork) = ne(net.graph)
+edges(net::AbstractNetwork) = edges(net.graph)
 
 # this is how one could define methods in LightGraphs
 # to make everything work for types that embed a graph
