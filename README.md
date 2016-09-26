@@ -33,12 +33,12 @@ setprop!(n, 2, :label="rose")
 
 #edge properties
 add_edge!(n, 1, 2, :width=10)
-setprop!(n, Edge(1,2), :label="violet")
+setprop!(n, Edge(1,2), :label="violet", :a = "b")
 getprop(n, 1, 2, :width) == 10
 
 ne(n) == 1 # number of edges
 
-setprop!(n, :name="mynetwork")
+setprop!(n, :name="mynetwork", :id=1) #set graph properties
 
 # construct from LightGraphs graphs
 n = Net(CompleteGraph(10, 10))
