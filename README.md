@@ -17,7 +17,7 @@ For example: `fadj(g::Any) = fadj(convert(SimpleGraph, g))` allows one to call `
 the forward adjacency list.
 
 ## Usage
-The types `Net` and `DiNet` are the two ready to use network types, for undirected and directed types respectively. They are able to store any number of graph/vertex/edge properties of any type. It is based on a dictionary of dictionaries
+The types `Net` and `DiNet` are the two ready-to-use network types, for undirected and directed networks respectively. They are able to store any number of graph/vertex/edge properties of any type. It is based on a dictionary of dictionaries
 structures.
 
 ```julia
@@ -41,7 +41,7 @@ ne(n) == 1 # number of edges
 setprop!(n, :name="mynetwork")
 
 # construct from LightGraphs graphs
-n = DiNet(CompleteGraph(10, 10))
+n = Net(CompleteGraph(10, 10))
 n = DiNet(DiGraph(10, 20)) # random graph with 10 vertices and 20 edges
 ```
 If you are looking for a more specialized and eventually more performant data structure, take a look to the `(Di)Network` type.
