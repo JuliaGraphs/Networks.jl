@@ -7,15 +7,19 @@ import LightGraphs: Graph, DiGraph, SimpleGraph, Edge,
 
 import Base: convert, promote_rule, ==
 
-export AbstractNetwork, Network
+export AbstractNetwork, Network, DiNetwork, ComplexNetworkNet
+export Net, DiNet, UNet
 
-export set_vprop!, set_eprop!
+export setprop!, getprop
 
 export graph
 
+#temporary
+export DSA
+
 include("interface.jl")
 include("network.jl")
-include("lightgraphs.jl")
+include("net.jl")
 
 
 end #module
