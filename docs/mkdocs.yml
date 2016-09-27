@@ -3,16 +3,11 @@ site_author: Seth Bromberger, James Fairbanks, Carlo Lucibello
 repo_url: https://github.com/JuliaGraphs/LightGraphs.jl/
 docs_dir: 'build'
 
-theme: material
-
-extra:
-  palette:
-    primary: 'indigo'
-    accent:  'blue'
+theme: bootswatch
 
 pages:
   - 'Getting Started': 'index.md'
-  - 'Networks': 'netowork.md'
+  - 'Networks': 'network.md'
   - 'Nets': 'net.md'
 
 extra_css:
