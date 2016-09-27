@@ -2,7 +2,14 @@ typealias DSA Dict{Symbol,Any}
 typealias EDSA Dict{Edge,DSA}
 typealias VDSA Dict{Int,DSA}
 
+"""
+An handy specialization of a generic Network.
+"""
 typealias Net Network{DSA, DSA, DSA}
+
+"""
+An handy specialization of a generic DiNetwork.
+"""
 typealias DiNet DiNetwork{DSA, DSA, DSA}
 
 typealias UNet Union{Net, DiNet}
