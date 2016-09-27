@@ -1,7 +1,3 @@
-n = Net(10)
-@test nv(n) == 10
-@test ne(n) == 0
-
 n10 = Net(CompleteGraph(10))
 @test graph(n10) == CompleteGraph(10)
 

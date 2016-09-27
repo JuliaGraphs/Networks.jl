@@ -18,7 +18,7 @@ DiNet(g::DiGraph) = DiNet(g, VDSA(), EDSA(), DSA())
 getprop(n::UNet, p::Symbol) = n.gprops[p]
 getprop(n::UNet, i::Int, p::Symbol) = n.vprops[i][p]
 function getprop(n::UNet, e::Edge, p::Symbol)
-    e = sort(n.graph, e)
+    e = sort(n, e)
     n.eprops[e][p]
 end
 getprop(n::UNet, i::Int, j::Int, p::Symbol) = getprop(n, Edge(i,j), p)
@@ -26,7 +26,7 @@ getprop(n::UNet, i::Int, j::Int, p::Symbol) = getprop(n, Edge(i,j), p)
 hasprop(n::UNet, p::Symbol) = haskey(n.gprops, p)
 hasprop(n::UNet, i::Int, p::Symbol) = haskey(n.vprops[i], p)
 function hasprop(n::UNet, e::Edge, p::Symbol)
-    e = sort(n.graph, e)
+    e = sort(n, e)
     haskey(n.eprops[e], p)
 end
 hasprop(n::UNet, i::Int, j::Int, p::Symbol) = hasprop(n, Edge(i,j), p)
@@ -40,7 +40,7 @@ function setprop!(n::UNet, i::Int; kws...)
 end
 
 function setprop!(n::UNet, e::Edge; kws...)
-    e = sort(n.graph, e)
+    e = sort(n, e)
     props = get(n.eprops, e, DSA())
     for (name,value) in kws
         props[name] = value
@@ -61,7 +61,7 @@ rmprop!(n::UNet, p::Symbol) = delete!(n.gprops, p)
 rmprop!(n::UNet, i::Int, p::Symbol) = delete!(n.vprops[i], p)
 rmprop!(n::UNet, i::Int, j::Int, p::Symbol) = rmprop!(n, Edge(i,j), p)
 function rmprop!(n::UNet, e::Edge, p::Symbol)
-    e = sort(n.graph, e)
+    e = sort(n, e)
     delete!(n.eprops[e], p)
 end
 
@@ -97,7 +97,7 @@ add_edge!(g, 1, 2)
 add_vertex!(g, Edge(2, 3), :label="ciao", :size=2.0)
 """
 function add_edge!(g::UNet, e::Edge; kws...)
-    e = sort(g.graph, e)
+    e = sort(g, e)
 
     g.eprops[e] = DSA(kws)
     return add_edge!(g.graph, e)
