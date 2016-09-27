@@ -57,7 +57,7 @@ function add_vertices!{V,E,H}(g::ComplexNetwork{V,E,H}, vprops::Vector{V})
 end
 
 function add_edge!{V,E,H}(g::ComplexNetwork{V,E,H}, e::Edge, eprop::E)
-    e = sort(g.graph, e)
+    e = sort(g, e)
     g.eprops[e] = eprop
     return add_edge!(g.graph, e)
 end
@@ -68,7 +68,7 @@ add_edge!{E}(net::ComplexNetwork, i::Int, j::Int, eprop::E) =
                                     add_edge!(net.graph, Edge(i,j), eprop)
 
 function rem_edge!(n::ComplexNetwork, e::Edge)
-    e = sort(n.graph, e)
+    e = sort(n, e)
     delete!(n.eprops, e)
     rem_edge!(n.graph, e)
 end
@@ -157,11 +157,11 @@ end
 
 
 getprop(net::ComplexNetwork, i::Int) = net.vprops[i]
-getprop(net::ComplexNetwork, e::Edge) = (e = sort(net.graph, e); net.eprops[e])
+getprop(net::ComplexNetwork, e::Edge) = (e = sort(net, e); net.eprops[e])
 getprop(net::ComplexNetwork, i::Int, j::Int) = getprop(net, Edge(i,j))
 
 function setprop!{V,E,H}(net::ComplexNetwork{V,E,H}, e::Edge, eprop::E)
-    e = sort(net.graph, e)
+    e = sort(net, e)
     net.eprops[e] = eprop
 end
 setprop!{V,E,H}(net::ComplexNetwork{V,E,H}, i::Int, j::Int, eprop::E) =
@@ -173,32 +173,29 @@ function rmprop!(net::ComplexNetwork, i::Int)
 end
 
 function rmprop!(net::ComplexNetwork, e::Edge)
-    e = sort(net.graph, e)
+    e = sort(net, e)
     delete!(net.eprops, e)
 end
 
 rmprop!(net::ComplexNetwork, i::Int, j::Int) = rmprop!(net, Edge(i,j))
 
 hasprop(net::ComplexNetwork, i::Int) = haskey(net.vprops, i)
-hasprop(net::ComplexNetwork, e::Edge) = (e=sort(net.graph, e); haskey(net.eprops, e))
+hasprop(net::ComplexNetwork, e::Edge) = (e=sort(net, e); haskey(net.eprops, e))
 hasprop(net::ComplexNetwork, i::Int, j::Int) = hasprop(net, Edge(i,j))
 
 
 ==(n::ComplexNetwork, m::ComplexNetwork) = (n.graph == m.graph) && (n.vprops == m.vprops) && (n.eprops == m.eprops)
 # Integration with LightGraphs package
 
-
-# conversion to underlying Graph:
+sort(g::Network, e::Edge) = e[1] <= e[2] ? e : reverse(e)
+sort(g::DiNetwork, e::Edge) = e
 graph(net::ComplexNetwork) = net.graph
-
-sort(g::Graph, e::Edge) = e[1] <= e[2] ? e : reverse(e)
-sort(g::DiGraph, e::Edge) = e
 
 function convert{T<:SimpleGraph, V,E,H}(::Type{T}, net::ComplexNetwork{V,E,H})
     if typeof(net.graph) <: T
         return net.graph
     else
-        error("Cannot convert network $G to graphtype $T")
+        error("Cannot convert network $T to graphtype $T")
     end
 end
 

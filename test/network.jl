@@ -16,31 +16,6 @@ function prepgraph(g)
     return net
 end
 
-net = prepgraph(g)
-
-@test convert(Graph, net) == g
-@test Graph(net) == g
-@test fadj(net) == fadj(g)
-# @test_throws UndefVarException convert(DiGraph, net)
-
-dnet = prepgraph(dg)
-@test convert(DiGraph, dnet) == dg
-@test fadj(dnet) == fadj(dg)
-# @test_throws UndefVarException convert(Graph, dnet)
-
-# test that least upper bound type
-# of a network and a graph is the compatible graph type
-@test promote_rule(Network{Int,Int,Void}, Graph) == Graph
-@test promote_rule(DiNetwork{Int,Int,Void}, DiGraph) == DiGraph
-@test promote(dnet, dg) == (dg,dg)
-@test promote(net, g) == (g,g)
-
-# if the graph types are incompatible do not promote!
-# @test promote_rule(Network{Int,Int,Void}, DiGraph) == Union{}
-# @test promote(net, dg) == (net, dg)
-# @test promote(dnet, g) == (dnet, g)
-
-
 g = Graph()
 add_vertex!(g)
 add_vertex!(g)
