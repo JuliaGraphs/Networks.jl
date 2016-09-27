@@ -77,8 +77,62 @@ add_vertex!(net3)
 setprop!(net3, Edge(2,1), "ciao")
 @test net3.eprops[Edge(1,2)] == "ciao"
 
-@test getprop(net3, Edge(1,2)) == "ciao"
-@test getprop(net3, Edge(2,1)) == "ciao"
+rem_edge!(net3, 1 , 2)
+@test ne(net3) == 0
+add_edge!(net3, 2, 1)
+@test ne(net3) == 1
+rem_edge!(net3, Edge(1 , 2))
+@test ne(net3) == 0
+add_edge!(net3, Edge(1, 2))
+@test ne(net3) == 1
+@test_throws KeyError getprop(net3, Edge(1,2))
+
+setprop!(net3, 3, 2, "ciao")
+@test getprop(net3, Edge(2,3)) == "ciao"
+@test getprop(net3, Edge(3,2)) == "ciao"
+
+rmprop!(net3, 3, 2)
+@test_throws KeyError getprop(net3, 3,2)
 
 @test Graph(net3) == net3.graph
 @test graph(net3) == net3.graph
+
+n = Net(CompleteGraph(5))
+for i=1:5
+    @test hasprop(n, i) == false
+end
+for (i,j) in edges(g)
+    @test hasprop(n, i, j) == false
+end
+setprop!(n, 2, lab="a")
+@test hasprop(n, 2) == true
+@test nv(n) == 5
+@test ne(n) == 10
+rmprop!(n, 2)
+@test hasprop(n, 2) == false
+
+## remove vertex test
+rem_vertex!(n, 2)
+@test nv(n) == 4
+for i=1:5
+    @test hasprop(n, i) == false
+end
+add_vertex!(n, lab="b")
+setprop!(n, 1, lab="a")
+setprop!(n, 1,2, lab="aa")
+@test nv(n) == 5
+rem_vertex!(n,5)
+@test getprop(n, 1) == Dict(:lab=>"a")
+@test getprop(n, 1,2) == Dict(:lab=>"aa")
+@test nv(n) == 4
+for i=2:4
+    @test hasprop(n, i) == false
+end
+
+rem_vertex!(n,4)
+@test getprop(n, 1) == Dict{Symbol,Any}(:lab=>"a")
+@test getprop(n, 1,2) == Dict{Symbol,Any}(:lab=>"aa")
+@test nv(n) == 3
+for i=2:3
+    @test hasprop(n, i) == false
+end

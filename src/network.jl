@@ -37,6 +37,7 @@ DiNetwork{V,E}(g::DiGraph, ::Type{V}, ::Type{E}) = DiNetwork(g, Dict{Int,V}(), D
 DiNetwork{V}(g::DiGraph, ::Type{V}) = DiNetwork(g, Dict{Int,V}(), Dict{Edge,Void}(), Void)
 
 #### core functions ###########
+
 function add_vertex!(g::ComplexNetwork)
     add_vertex!(g.graph)
     return nv(g)
@@ -66,6 +67,89 @@ add_edge!(net::ComplexNetwork, e::Edge) = add_edge!(net.graph, e)
 add_edge!{E}(net::ComplexNetwork, i::Int, j::Int, eprop::E) =
                                     add_edge!(net.graph, Edge(i,j), eprop)
 
+function rem_edge!(n::ComplexNetwork, e::Edge)
+    e = sort(n.graph, e)
+    delete!(n.eprops, e)
+    rem_edge!(n.graph, e)
+end
+
+rem_edge!(n::ComplexNetwork, i::Int, j::Int) = rem_edge!(n, Edge(i,j))
+
+"""
+    rem_vertex!(g, v)
+
+Remove the vertex `v` from graph `g`.
+This operation has to be performed carefully if one keeps external data structures indexed by
+edges or vertices in the graph, since internally the removal is performed swapping the vertices `v`  and `n=nv(g)`,
+and removing the vertex `n` from the graph.
+After removal the vertices in the ` g` will be indexed by 1:n-1.
+This is an O(k^2) operation, where `k` is the max of the degrees of vertices `v` and `n`.
+Returns false if removal fails (e.g., if vertex is not in the graph); true otherwise.
+"""
+function rem_vertex!(net::ComplexNetwork, v::Int)
+    g = net.graph
+    v in vertices(g) || return false
+    n = nv(g)
+
+    edgs = in_edges(g, v)
+    for e in edgs
+        rem_edge!(net, e)
+    end
+
+    neigs = copy(in_neighbors(g, n))
+    for i in neigs
+        rem_edge!(g, Edge(i, n))
+    end
+    if v != n
+        for i in neigs
+            eold = Edge(i, n)
+            enew = Edge(i, v)
+            add_edge!(g, enew)
+            if hasprop(net, eold)
+                ep = getprop(net, eold)
+                rmprop!(net, eold)
+                setprop!(net, enew, ep)
+            end
+        end
+    end
+
+    if is_directed(g)
+        edgs = out_edges(g, v)
+        for e in edgs
+            rem_edge!(net, e)
+        end
+        neigs = copy(out_neighbors(g, n))
+        for i in neigs
+            rem_edge!(g, Edge(n, i))
+        end
+        if v != n
+            for i in neigs
+                eold = Edge(n,i)
+                enew = Edge(v,i)
+                add_edge!(g, enew)
+                if hasprop(net, eold)
+                    ep = getprop(net, eold)
+                    rmprop!(net, eold)
+                    setprop!(net, enew, ep)
+                end
+            end
+        end
+    end
+
+    if hasprop(net, n)
+        p = getprop(net, n)
+        rmprop!(net, n)
+        setprop!(net, v, p)
+    end
+    g.vertices = 1:n-1
+    pop!(g.fadjlist)
+    if is_directed(g)
+        pop!(g.badjlist)
+    end
+    return true
+end
+
+### properties setters and getters
 
 function setprop!{V,E,H}(net::ComplexNetwork{V,E,H}, i::Int, vprop::V)
     net.vprops[i] = vprop
@@ -74,14 +158,33 @@ end
 
 getprop(net::ComplexNetwork, i::Int) = net.vprops[i]
 getprop(net::ComplexNetwork, e::Edge) = (e = sort(net.graph, e); net.eprops[e])
+getprop(net::ComplexNetwork, i::Int, j::Int) = getprop(net, Edge(i,j))
 
 function setprop!{V,E,H}(net::ComplexNetwork{V,E,H}, e::Edge, eprop::E)
     e = sort(net.graph, e)
     net.eprops[e] = eprop
 end
+setprop!{V,E,H}(net::ComplexNetwork{V,E,H}, i::Int, j::Int, eprop::E) =
+                                                setprop!(net, Edge(i,j), eprop)
+
+
+function rmprop!(net::ComplexNetwork, i::Int)
+    delete!(net.vprops, i)
+end
+
+function rmprop!(net::ComplexNetwork, e::Edge)
+    e = sort(net.graph, e)
+    delete!(net.eprops, e)
+end
+
+rmprop!(net::ComplexNetwork, i::Int, j::Int) = rmprop!(net, Edge(i,j))
+
+hasprop(net::ComplexNetwork, i::Int) = haskey(net.vprops, i)
+hasprop(net::ComplexNetwork, e::Edge) = (e=sort(net.graph, e); haskey(net.eprops, e))
+hasprop(net::ComplexNetwork, i::Int, j::Int) = hasprop(net, Edge(i,j))
+
 
 ==(n::ComplexNetwork, m::ComplexNetwork) = (n.graph == m.graph) && (n.vprops == m.vprops) && (n.eprops == m.eprops)
-
 # Integration with LightGraphs package
 
 
