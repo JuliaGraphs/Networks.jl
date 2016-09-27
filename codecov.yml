@@ -5,7 +5,7 @@ coverage:
         target: '100'
     project:
       default:
-        target: '50'
+        target: '90'
 comment:
   layout: "header, diff"
   behavior: default
