@@ -1,4 +1,4 @@
-# Network
+# Net
 
 *Networks.jl* implements the two types, `Net` and `DiNet`, for common network use.
 
