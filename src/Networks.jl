@@ -1,9 +1,11 @@
 module Networks
 using LightGraphs
 
-import LightGraphs: Graph, DiGraph, SimpleGraph, Edge,
+import LightGraphs: Graph, DiGraph, Edge,
         fadj, nv, ne, edges,
         add_vertex!, add_vertices!, add_edge!, rem_edge!, rem_vertex!
+
+import LightGraphs.SimpleGraphs: SimpleGraph, SimpleDiGraph
 
 import Base: convert, promote_rule, ==, sort
 
