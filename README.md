@@ -1,5 +1,8 @@
 # Networks
 
+**(NOTE: AS OF 20170729, THIS PACKAGE IS NO LONGER BEING MAINTAINED. Users of this package are encouraged to migrate to
+[MetaGraphs.jl](https://github.com/JuliaGraphs/MetaGraphs.jl).**
+
 [![Build Status](https://travis-ci.org/JuliaGraphs/Networks.jl.svg?branch=master)](https://travis-ci.org/JuliaGraphs/Networks.jl)
 [![codecov.io](http://codecov.io/github/JuliaGraphs/Networks.jl/coverage.svg?branch=master)](http://codecov.io/github/JuliaGraphs/Networks.jl?branch=master)
 [![](https://img.shields.io/badge/docs-latest-blue.svg)](https://juliagraphs.github.io/Networks.jl/latest)
